@@ -58,6 +58,9 @@ dev_all = [
     "kiara[dev_all]"
 ]
 
+[project.entry-points."kiara.plugin"]
+html = "kiara_plugin.html"
+
 [project.entry-points."kiara.data_types"]
 html = "kiara_plugin.html:find_data_types"
 
