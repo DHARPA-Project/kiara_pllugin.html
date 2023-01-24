@@ -52,6 +52,10 @@ find_pipelines: KiaraEntryPointItem = (
     KIARA_METADATA,
 )
 
+renderer_profiles = {
+    "value": {"html": {"renderer": "value_renderer", "config": {"target_type": "html"}}}
+}
+
 
 def get_version():
     from pkg_resources import DistributionNotFound, get_distribution
