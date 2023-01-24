@@ -715,6 +715,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#kiara_plugin.html.renderer_profiles" class="md-nav__link">
+    renderer_profiles
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -874,6 +881,25 @@
 
 </div>
 
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="kiara_plugin.html.renderer_profiles" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">renderer_profiles</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;html&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;renderer&#39;</span><span class="p">:</span> <span class="s1">&#39;value_renderer&#39;</span><span class="p">,</span> <span class="s1">&#39;config&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;target_type&#39;</span><span class="p">:</span> <span class="s1">&#39;html&#39;</span><span class="p">}}}}</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
+  </span>
+
+<a href="#kiara_plugin.html.renderer_profiles" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+  </div>
+
+</div>
+
 <h2 id="kiara_plugin.html-functions">Functions<a href="#kiara_plugin.html-functions" class="headerlink" title="Permanent link">&para;</a></h2>
 
 <div class="doc doc-object doc-function">
@@ -890,11 +916,7 @@
 
       <details class="quote">
         <summary>Source code in <code>kiara_plugin/html/__init__.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">56</span>
-<span class="normal">57</span>
-<span class="normal">58</span>
-<span class="normal">59</span>
-<span class="normal">60</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">60</span>
 <span class="normal">61</span>
 <span class="normal">62</span>
 <span class="normal">63</span>
@@ -914,7 +936,11 @@
 <span class="normal">77</span>
 <span class="normal">78</span>
 <span class="normal">79</span>
-<span class="normal">80</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_version</span><span class="p">():</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_version</span><span class="p">():</span>
     <span class="kn">from</span> <span class="nn">pkg_resources</span> <span class="kn">import</span> <span class="n">DistributionNotFound</span><span class="p">,</span> <span class="n">get_distribution</span>
 
     <span class="k">try</span><span class="p">:</span>
