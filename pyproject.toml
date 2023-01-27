@@ -35,6 +35,7 @@ dependencies = [
     "hypercorn",
     "json2html>=1.3.0",
     "markdown>=3.2.1",
+    "pygraphviz>=1.10",
     "pymdown-extensions>=9.9",
     "airium>=0.2.3"
 ]
@@ -69,6 +70,9 @@ html = "kiara_plugin.html:find_modules"
 
 [project.entry-points."kiara.pipelines"]
 html = "kiara_plugin.html:find_pipelines"
+
+[project.entry-points."kiara.renderers"]
+html = "kiara_plugin.html:find_renderer_classes"
 
 
 [project.urls]
