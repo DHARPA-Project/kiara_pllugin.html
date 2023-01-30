@@ -142,7 +142,7 @@ class LineageRendererHtml(
             details = "Available styles:\n\n"
             for attr in dir(self):
                 if attr.startswith("render__"):
-                    details += f" - {attr.replace('render_', '')}\n"
+                    details += f" - {attr.replace('render__', '')}\n"
             raise KiaraException(
                 f"Can't render lineage in requested style '{render_style}': style not available.",
                 details=details,
@@ -205,3 +205,12 @@ class LineageRendererHtml(
             )
 
         return str(airium)
+
+    def render__tree(self, lineage: ValueLineage, **config) -> str:
+
+        template = self._kiara.render_registry.get_template(
+            "lineage/lineage.html.j2", template_base="kiara_plugin.html"
+        )
+
+        result = template.render(value_lineage=lineage)
+        return result
