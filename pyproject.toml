@@ -58,10 +58,12 @@ dev_documentation = [
 ]
 dev_testing = [
     "kiara[dev_testing]",
+    "types-Markdown",
     "ruff>=0.0.237"
 ]
 dev_utils = [
     "kiara[dev_utils]",
+    "types-Markdown",
     "ruff>=0.0.237"
 
 ]

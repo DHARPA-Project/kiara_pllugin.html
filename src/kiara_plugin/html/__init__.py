@@ -77,7 +77,7 @@ def get_version():
                 __version__ = "unknown"
 
         except (Exception):
-            pass
+            pass  # noqa
 
         if __version__ is None:
             __version__ = "unknown"

@@ -2,15 +2,16 @@
 from typing import Any, Mapping
 
 import orjson
+from pygments import highlight
+from pygments.lexers.data import JsonLexer
+from pymdownx.highlight import HtmlFormatter
+
 from kiara import Value
 from kiara.exceptions import KiaraProcessingException
 from kiara.models.data_types import DictModel
 from kiara.models.rendering import RenderScene, RenderValueResult
 from kiara.modules.included_core_modules.render_value import RenderValueModule
 from kiara.utils.json import orjson_dumps
-from pygments import highlight
-from pygments.lexers.data import JsonLexer
-from pymdownx.highlight import HtmlFormatter
 
 
 class RenderCoreTypeModuleWeb(RenderValueModule):
