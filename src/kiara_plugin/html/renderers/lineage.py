@@ -212,5 +212,5 @@ class LineageRendererHtml(
             "lineage/lineage.html.j2", template_base="kiara_plugin.html"
         )
 
-        result = template.render(value_lineage=lineage)
+        result = template.render(value_lineage=lineage, **config)
         return result
