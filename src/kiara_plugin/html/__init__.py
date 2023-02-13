@@ -76,8 +76,10 @@ def get_version():
             else:
                 __version__ = "unknown"
 
-        except (Exception):
-            pass  # noqa
+        except Exception as e:
+            from kiara.utils import log_exception
+
+            log_exception(e)
 
         if __version__ is None:
             __version__ = "unknown"
