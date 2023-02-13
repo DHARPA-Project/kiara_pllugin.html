@@ -3,7 +3,7 @@ from typing import Any, Mapping
 
 from airium import Airium
 
-from kiara import Value
+from kiara.api import Value
 from kiara.models.filesystem import FileBundle
 from kiara.models.rendering import RenderValueResult
 from kiara.modules.included_core_modules.render_value import RenderValueModule

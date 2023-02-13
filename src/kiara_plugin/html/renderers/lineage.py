@@ -6,7 +6,7 @@ from typing import Any, Dict, Iterable, Type, Union
 from airium import Airium
 from pydantic import Field, root_validator
 
-from kiara import Kiara, Value
+from kiara.api import Kiara, Value
 from kiara.exceptions import KiaraException
 from kiara.models.values.lineage import ValueLineage
 from kiara.models.values.value import ORPHAN, ValuePedigree

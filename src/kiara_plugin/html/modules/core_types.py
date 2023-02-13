@@ -6,7 +6,7 @@ from pygments import highlight
 from pygments.lexers.data import JsonLexer
 from pymdownx.highlight import HtmlFormatter
 
-from kiara import Value
+from kiara.api import Value
 from kiara.exceptions import KiaraProcessingException
 from kiara.models.data_types import DictModel
 from kiara.models.rendering import RenderScene, RenderValueResult

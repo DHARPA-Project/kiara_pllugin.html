@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from typing import Any, Mapping
 
-from kiara import Value
+from kiara.api import Value
 from kiara.models.rendering import RenderValueResult
 from kiara_plugin.tabular.modules.db import RenderDatabaseModuleBase
 from kiara_plugin.tabular.modules.table import RenderTableModuleBase
