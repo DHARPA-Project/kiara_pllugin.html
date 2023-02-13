@@ -17,7 +17,7 @@
         <link rel="next" href="../operations/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.9">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.12">
     
     
       
@@ -897,26 +897,37 @@
     <td>The python class that implements this module type.</td>
   </tr>
   <tr>
-    <td>process_src</td>
-    <td>def process(self, inputs: ValueMap, outputs: ValueMap):
+    <td>module_src</td>
+    <td>class PrettyPrintWebModule(PrettyPrintModule):
 
-    source_type = self.get_config_value("source_type")
-    target_type = self.get_config_value("target_type")
+    _module_type_name = "pretty_print.html"
 
-    value = inputs.get_value_obj("value")
-    render_config = inputs.get_value_data("render_config")
+    def pretty_print__table__as__html(
+        self, value: Value, render_config: Dict[str, Any]
+    ):
 
-    func_name = f"pretty_print__{source_type}__as__{target_type}"
+        max_rows = render_config.get(
+            "max_no_rows", DEFAULT_PRETTY_PRINT_CONFIG["max_no_rows"]
+        )
+        max_row_height = render_config.get(
+            "max_row_height", DEFAULT_PRETTY_PRINT_CONFIG["max_row_height"]
+        )
+        max_cell_length = render_config.get(
+            "max_cell_length", DEFAULT_PRETTY_PRINT_CONFIG["max_cell_length"]
+        )
 
-    func = getattr(self, func_name)
-    # TODO: check function signature is valid
+        half_lines: Union[None, int] = None
+        if max_rows:
+            half_lines = int(max_rows / 2)
 
-    if render_config is None:
-        render_config = {}
-
-    result = func(value=value, render_config=render_config)
-
-    outputs.set_value("rendered_value", result)
+        atw = ArrowTabularWrap(value.data.arrow_table)
+        result = atw.as_html(
+            rows_head=half_lines,
+            rows_tail=half_lines,
+            max_row_height=max_row_height,
+            max_cell_length=max_cell_length,
+        )
+        return result
 </td>
     <td>The source code of the process method of the module.</td>
   </tr>
@@ -998,37 +1009,69 @@
     <td>The python class that implements this module type.</td>
   </tr>
   <tr>
-    <td>process_src</td>
-    <td>def process(self, inputs: ValueMap, outputs: ValueMap) -> None:
+    <td>module_src</td>
+    <td>class RenderCoreTypeModuleWeb(RenderValueModule):
+    _module_type_name = "render.core_types.for.web"
 
-    source_type = self.get_config_value("source_type")
-    target_type = self.get_config_value("target_type")
+    def render__dict__as__html(self, value: Value, render_config: Mapping[str, Any]):
 
-    value: Value = inputs.get_value_obj("value")
+        render_scene = render_config.get("scene_name", "data")
+        # input_number_of_rows = render_config.get("number_of_rows", 20)
+        # input_row_offset = render_config.get("row_offset", 0)
+        as_table = render_config.get("as_table", True)
 
-    render_scene: DictModel = inputs.get_value_data("render_config")
-    if render_scene:
-        rc = render_scene.dict_data
-    else:
-        rc = {}
+        dict_model: DictModel = value.data
 
-    func_name = f"render__{source_type}__as__{target_type}"
+        if render_scene == "data":
+            to_render = dict_model.dict_data
+        elif render_scene == "schema":
+            to_render = dict_model.data_schema
+        else:
+            raise KiaraProcessingException(
+                f"Invalid value '{render_scene}' argument 'scene_name': only 'data' and 'schema' are allowed"
+            )
 
-    func = getattr(self, func_name)
-    result = func(value=value, render_config=rc)
-    if isinstance(result, RenderValueResult):
-        render_scene_result: RenderValueResult = result
-    else:
-        render_scene_result = RenderValueResult(
+        from json2html import json2html
+
+        if as_table:
+            if not to_render:
+                pretty = "-- empty dict --"
+            else:
+                pretty = json2html.convert(
+                    json=to_render,
+                    table_attributes=f'id="dict-preview-{ value.value_id }" class=""',
+                )
+        else:
+            json_string = orjson_dumps(
+                dict_model.dict_data,
+                option=orjson.OPT_NON_STR_KEYS | orjson.OPT_INDENT_2,
+            )
+            pretty = highlight(json_string, JsonLexer(), HtmlFormatter())
+
+        related_scenes = {
+            "data": RenderScene.construct(
+                title="data",
+                disabled=render_scene == "data",
+                description="Render the data of the dict.",
+                manifest_hash=self.manifest.manifest_hash,
+                render_config={"scene_name": "data"},
+            ),
+            "schema": RenderScene.construct(
+                title="schema",
+                disabled=render_scene == "schema",
+                description="Show the (json) schema of the dict value.",
+                manifest_hash=self.manifest.manifest_hash,
+                render_config={"scene_name": "schema"},
+            ),
+        }
+
+        return RenderValueResult(
             value_id=value.value_id,
-            render_config=rc,
+            render_config=render_config,
             render_manifest=self.manifest.manifest_hash,
-            rendered=result,
-            related_scenes={},
+            rendered=pretty,
+            related_scenes=related_scenes,
         )
-    render_scene_result.manifest_lookup[self.manifest.manifest_hash] = self.manifest
-
-    outputs.set_value("render_value_result", render_scene_result)
 </td>
     <td>The source code of the process method of the module.</td>
   </tr>
@@ -1110,37 +1153,75 @@
     <td>The python class that implements this module type.</td>
   </tr>
   <tr>
-    <td>process_src</td>
-    <td>def process(self, inputs: ValueMap, outputs: ValueMap) -> None:
+    <td>module_src</td>
+    <td>class RenderCoreTypeModuleWeb(RenderValueModule):
+    _module_type_name = "render.included_types.for.web"
 
-    source_type = self.get_config_value("source_type")
-    target_type = self.get_config_value("target_type")
+    def render__none__as__html(self, value: Value, render_config: Mapping[str, Any]):
 
-    value: Value = inputs.get_value_obj("value")
-
-    render_scene: DictModel = inputs.get_value_data("render_config")
-    if render_scene:
-        rc = render_scene.dict_data
-    else:
-        rc = {}
-
-    func_name = f"render__{source_type}__as__{target_type}"
-
-    func = getattr(self, func_name)
-    result = func(value=value, render_config=rc)
-    if isinstance(result, RenderValueResult):
-        render_scene_result: RenderValueResult = result
-    else:
-        render_scene_result = RenderValueResult(
+        return RenderValueResult(
             value_id=value.value_id,
-            render_config=rc,
+            render_config=render_config,
             render_manifest=self.manifest.manifest_hash,
-            rendered=result,
+            rendered="<div>-- value empty --</div>",
             related_scenes={},
         )
-    render_scene_result.manifest_lookup[self.manifest.manifest_hash] = self.manifest
 
-    outputs.set_value("render_value_result", render_scene_result)
+    def render__file_bundle__as__html(
+        self, value: Value, render_config: Mapping[str, Any]
+    ):
+
+        import humanfriendly
+
+        # render_scene = render_config.get("scene_name", "data")
+        file_bundle: FileBundle = value.data
+
+        # to_render = file_bundle.dict()
+
+        doc = Airium()
+        with doc.table():
+            with doc.tr():
+                with doc.th():
+                    doc("included_files")
+                with doc.th():
+                    doc("metadata")
+            with doc.tr():
+                with doc.td():
+                    with doc.table():
+                        for file_name, incl_file in file_bundle.included_files.items():
+                            with doc.tr():
+                                with doc.td():
+                                    doc(file_name)
+                                with doc.td():
+                                    file_size = humanfriendly.format_size(
+                                        incl_file.size
+                                    )
+                                    doc(file_size)
+                with doc.td():
+                    with doc.table():
+                        with doc.tr():
+                            with doc.td():
+                                doc("bundle name")
+                            with doc.td():
+                                doc(file_bundle.bundle_name)
+                        with doc.tr():
+                            with doc.td():
+                                doc("bundle size")
+                            with doc.td():
+                                bundle_size = humanfriendly.format_size(
+                                    file_bundle.size
+                                )
+                                doc(bundle_size)
+
+        pretty = str(doc)
+
+        return RenderValueResult(
+            value_id=value.value_id,
+            render_config=render_config,
+            render_manifest=self.manifest.manifest_hash,
+            rendered=pretty,
+            related_scenes={},
+        )
 </td>
     <td>The source code of the process method of the module.</td>
   </tr>
@@ -1222,15 +1303,31 @@
     <td>The python class that implements this module type.</td>
   </tr>
   <tr>
-    <td>process_src</td>
-    <td>def process(self, inputs: ValueMap, outputs: ValueMap):
+    <td>module_src</td>
+    <td>class RenderMarkdown(KiaraModule):
 
-    import markdown
+    _module_type_name = "render.markdown.to.html"
 
-    markdown_string = inputs.get_value_data("markdown")
-    html = markdown.markdown(markdown_string)
+    def create_inputs_schema(
+        self,
+    ) -> ValueSetSchema:
 
-    outputs.set_value("html", html)
+        return {"markdown": {"type": "string", "doc": "The markdown string"}}
+
+    def create_outputs_schema(
+        self,
+    ) -> ValueSetSchema:
+
+        return {"html": {"type": "html", "doc": "The rendered html"}}
+
+    def process(self, inputs: ValueMap, outputs: ValueMap):
+
+        import markdown
+
+        markdown_string = inputs.get_value_data("markdown")
+        html = markdown.markdown(markdown_string)
+
+        outputs.set_value("html", html)
 </td>
     <td>The source code of the process method of the module.</td>
   </tr>
@@ -1275,7 +1372,7 @@
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tracking"], "search": "../../assets/javascripts/workers/search.db81ec45.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.a00a7c5e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.4b2c34cd.min.js"></script>
       
     
   </body>
