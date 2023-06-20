@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 from typing import Any, Dict, Union
 
+from kiara.api import KiaraModule, Value, ValueMap, ValueMapSchema
 from kiara.defaults import DEFAULT_PRETTY_PRINT_CONFIG
-from kiara.models.values.value import Value, ValueMap
-from kiara.modules import KiaraModule, ValueSetSchema
 from kiara.modules.included_core_modules.pretty_print import PrettyPrintModule
 from kiara.utils.output import ArrowTabularWrap
 
@@ -14,13 +13,13 @@ class RenderMarkdown(KiaraModule):
 
     def create_inputs_schema(
         self,
-    ) -> ValueSetSchema:
+    ) -> ValueMapSchema:
 
         return {"markdown": {"type": "string", "doc": "The markdown string"}}
 
     def create_outputs_schema(
         self,
-    ) -> ValueSetSchema:
+    ) -> ValueMapSchema:
 
         return {"html": {"type": "html", "doc": "The rendered html"}}
 
