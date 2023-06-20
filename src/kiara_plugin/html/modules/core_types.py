@@ -8,7 +8,7 @@ from pymdownx.highlight import HtmlFormatter
 
 from kiara.api import Value
 from kiara.exceptions import KiaraProcessingException
-from kiara.models.data_types import DictModel
+from kiara.models.data_types import KiaraDict
 from kiara.models.rendering import RenderScene, RenderValueResult
 from kiara.modules.included_core_modules.render_value import RenderValueModule
 from kiara.utils.json import orjson_dumps
@@ -24,7 +24,7 @@ class RenderCoreTypeModuleWeb(RenderValueModule):
         # input_row_offset = render_config.get("row_offset", 0)
         as_table = render_config.get("as_table", True)
 
-        dict_model: DictModel = value.data
+        dict_model: KiaraDict = value.data
 
         if render_scene == "data":
             to_render = dict_model.dict_data
