@@ -4,7 +4,7 @@ from typing import Any, Mapping
 from airium import Airium
 
 from kiara.api import Value
-from kiara.models.filesystem import FileBundle
+from kiara.models.filesystem import KiaraFileBundle
 from kiara.models.rendering import RenderValueResult
 from kiara.modules.included_core_modules.render_value import RenderValueModule
 
@@ -29,7 +29,7 @@ class RenderCoreTypeModuleWeb(RenderValueModule):
         import humanfriendly
 
         # render_scene = render_config.get("scene_name", "data")
-        file_bundle: FileBundle = value.data
+        file_bundle: KiaraFileBundle = value.data
 
         # to_render = file_bundle.dict()
 
