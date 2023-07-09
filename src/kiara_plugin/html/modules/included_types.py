@@ -4,7 +4,7 @@ from typing import Any, Mapping
 from airium import Airium
 
 from kiara.api import Value
-from kiara.models.filesystem import KiaraFileBundle
+from kiara.models.filesystem import KiaraFile, KiaraFileBundle
 from kiara.models.rendering import RenderValueResult
 from kiara.modules.included_core_modules.render_value import RenderValueModule
 
@@ -69,6 +69,25 @@ class RenderCoreTypeModuleWeb(RenderValueModule):
                                 doc(bundle_size)
 
         pretty = str(doc)
+
+        return RenderValueResult(
+            value_id=value.value_id,
+            render_config=render_config,
+            render_manifest=self.manifest.manifest_hash,
+            rendered=pretty,
+            related_scenes={},
+        )
+
+    def render__file__as__html(self, value: Value, render_config: Mapping[str, Any]):
+
+        # render_scene = render_config.get("scene_name", "data")
+        file: KiaraFile = value.data
+
+        text = file.read_text(max_lines=20)
+        text = f"{text}\n\n... (truncated)"
+
+        text = text.replace("\n", "<br>")
+        pretty = text
 
         return RenderValueResult(
             value_id=value.value_id,
