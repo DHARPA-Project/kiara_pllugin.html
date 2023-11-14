@@ -52,7 +52,6 @@ src/kiara_plugin/html/version.txt
 public
 site
 .dephell_report
-.direnv
 .mypy_cache
 .env
 docs/api-documentation.md
@@ -63,3 +62,6 @@ onefile.spec
 *_complete.zsh.zwc
 ci/conda/**/build
 ci/conda/kiara_plugin.html/meta.yaml
+.pixi
+pixi.lock
+dev.py
