@@ -258,5 +258,11 @@ plugins = [
 
 # mypy per-module options:
 [[tool.mypy.overrides]]
-module = ["placholder.dummy.*"]
+module = [
+    "airium",
+    "appdirs.*",
+    "json2html",
+    "ruamel.*",
+    "pymdownx.*",
+]
 ignore_missing_imports = true
