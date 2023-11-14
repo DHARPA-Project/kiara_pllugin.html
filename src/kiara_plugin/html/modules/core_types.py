@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Mapping
+from typing import Any, Dict, Hashable, Mapping
 
 import orjson
 from pygments import highlight
@@ -27,9 +27,9 @@ class RenderCoreTypeModuleWeb(RenderValueModule):
         dict_model: KiaraDict = value.data
 
         if render_scene == "data":
-            to_render = dict_model.dict_data
+            to_render: Dict[Hashable, Any] = dict_model.dict_data
         elif render_scene == "schema":
-            to_render = dict_model.data_schema
+            to_render = dict_model.data_schema  # type: ignore
         else:
             raise KiaraProcessingException(
                 f"Invalid value '{render_scene}' argument 'scene_name': only 'data' and 'schema' are allowed"
@@ -53,14 +53,14 @@ class RenderCoreTypeModuleWeb(RenderValueModule):
             pretty = highlight(json_string, JsonLexer(), HtmlFormatter())
 
         related_scenes = {
-            "data": RenderScene.construct(
+            "data": RenderScene(
                 title="data",
                 disabled=render_scene == "data",
                 description="Render the data of the dict.",
                 manifest_hash=self.manifest.manifest_hash,
                 render_config={"scene_name": "data"},
             ),
-            "schema": RenderScene.construct(
+            "schema": RenderScene(
                 title="schema",
                 disabled=render_scene == "schema",
                 description="Show the (json) schema of the dict value.",
