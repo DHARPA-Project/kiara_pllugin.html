@@ -4,7 +4,7 @@ import uuid
 from typing import Any, Dict, Iterable, Type, Union
 
 from airium import Airium
-from pydantic import Field, root_validator
+from pydantic import model_validator, Field
 
 from kiara.api import Kiara, Value
 from kiara.exceptions import KiaraException
@@ -30,7 +30,8 @@ class LineageHtmlInputs(RenderInputsSchema):
         default_factory=dict,
     )
 
-    @root_validator(pre=True)
+    @model_validator(mode="before")
+    @classmethod
     def validate_linage_inputs(cls, values):
 
         result = {}

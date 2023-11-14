@@ -15,7 +15,7 @@
 #
 # class RenderHtmlValueScene(RenderScene):
 #
-#     _kiara_model_id = "instance.render_scene.html_any"
+#     _kiara_model_id: ClassVar = "instance.render_scene.html_any"
 #
 #     @classmethod
 #     def retrieve_source_type(cls) -> str:
@@ -40,7 +40,7 @@
 #
 # class RenderHtmlArrayScene(BaseRenderTableScene):
 #
-#     _kiara_model_id = "instance.render_scene.html_array"
+#     _kiara_model_id: ClassVar = "instance.render_scene.html_array"
 #
 #     @classmethod
 #     def retrieve_source_type(cls) -> str:
@@ -77,7 +77,7 @@
 #
 # class RenderHtmlTableScene(BaseRenderTableScene):
 #
-#     _kiara_model_id = "instance.render_scene.html_table"
+#     _kiara_model_id: ClassVar = "instance.render_scene.html_table"
 #
 #     def render_as__html(self, value: Value):
 #
